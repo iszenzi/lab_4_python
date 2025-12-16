@@ -21,11 +21,11 @@ class Library:
 
     def find_by_author(self, author: str) -> BookCollection:
         author_index = self.index["author"]
-        return author_index.get(author, BookCollection())
+        return BookCollection(list(author_index.get(author, BookCollection())))
 
     def find_by_year(self, year: int) -> BookCollection:
         year_index = self.index["year"]
-        return year_index.get(year, BookCollection())
+        return BookCollection(list(year_index.get(year, BookCollection())))
 
     def find_by_genre(self, genre: str) -> BookCollection:
         result = BookCollection()
