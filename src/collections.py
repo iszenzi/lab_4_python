@@ -4,7 +4,7 @@ from src.book import Book
 
 
 class BookCollection:
-    def __init__(self, books: list[Book] | None = None):
+    def __init__(self, books: list[Book] | None = None) -> None:
         if books is None:
             self._books: list[Book] = []
         else:
@@ -62,13 +62,13 @@ class IndexDict:
             if not self._by_year[book.year]:
                 del self._by_year[book.year]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._by_isbn)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Book]:
         return iter(self._by_isbn.values())
 
-    def __getitem__(self, key: Union[str, int]) -> Any:
+    def __getitem__(self, key: str | int) -> Any:
         if key == "isbn":
             return self._by_isbn
         if key == "author":
@@ -87,7 +87,7 @@ class IndexDict:
 
         raise KeyError(f"Ключ '{key}' не найден")
 
-    def __contains__(self, item: Union[Book, str, int]) -> bool:
+    def __contains__(self, item: Book | str | int) -> bool:
         if isinstance(item, Book):
             return item.isbn in self._by_isbn
         elif isinstance(item, str):

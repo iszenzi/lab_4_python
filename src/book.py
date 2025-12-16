@@ -1,5 +1,7 @@
 class Book:
-    def __init__(self, title: str, author: str, year: int, genre: str, isbn: str):
+    def __init__(
+        self, title: str, author: str, year: int, genre: str, isbn: str
+    ) -> None:
         self.title = title
         self.author = author
         self.year = year
@@ -11,7 +13,9 @@ class Book:
 
 
 class FictionBook(Book):
-    def __init__(self, title: str, author: str, year: int, genre: str, isbn: str):
+    def __init__(
+        self, title: str, author: str, year: int, genre: str, isbn: str
+    ) -> None:
         super().__init__(title, author, year, genre, isbn)
 
     def __repr__(self) -> str:
@@ -19,7 +23,9 @@ class FictionBook(Book):
 
 
 class NonFictionBook(Book):
-    def __init__(self, title: str, author: str, year: int, genre: str, isbn: str):
+    def __init__(
+        self, title: str, author: str, year: int, genre: str, isbn: str
+    ) -> None:
         super().__init__(title, author, year, genre, isbn)
 
     def __repr__(self) -> str:

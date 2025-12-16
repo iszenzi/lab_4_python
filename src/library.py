@@ -34,5 +34,5 @@ class Library:
                 result.add_book(book)
         return result
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Library(books_count={len(self.collection)})"
