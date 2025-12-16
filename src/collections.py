@@ -40,15 +40,6 @@ class IndexDict:
         self._by_author: Dict[str, BookCollection] = {}
         self._by_year: Dict[int, BookCollection] = {}
 
-    def get_by_isbn(self, isbn: str) -> Book | None:
-        return self._by_isbn.get(isbn)
-
-    def get_by_author(self, author: str) -> BookCollection:
-        return self._by_author.get(author, BookCollection())
-
-    def get_by_year(self, year: int) -> BookCollection:
-        return self._by_year.get(year, BookCollection())
-
     def add_book(self, book: Book) -> None:
         if book.isbn in self._by_isbn:
             raise ValueError(f"Книга с таким ISBN: '{book}' уже есть в коллекции")
@@ -78,15 +69,12 @@ class IndexDict:
         return iter(self._by_isbn.values())
 
     def __getitem__(self, key: Union[str, int]) -> Any:
-        """Доступ по ключу.
-
-        Поддерживается:
-        - `str`: сначала трактуется как ISBN, затем как author.
-        - `int`: трактуется как year.
-
-        Примечание: строковый ключ неоднозначен (ISBN/author). На следующем этапе
-        сделаем API явным и избавимся от этой неоднозначности.
-        """
+        if key == "isbn":
+            return self._by_isbn
+        if key == "author":
+            return self._by_author
+        if key == "year":
+            return self._by_year
 
         if isinstance(key, str):
             if key in self._by_isbn:
@@ -96,6 +84,7 @@ class IndexDict:
         elif isinstance(key, int):
             if key in self._by_year:
                 return self._by_year[key]
+
         raise KeyError(f"Ключ '{key}' не найден")
 
     def __contains__(self, item: Union[Book, str, int]) -> bool:
