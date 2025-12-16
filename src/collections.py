@@ -1,6 +1,4 @@
-# from __future__ import annotations
-
-from typing import Union, Dict, Any
+from typing import Any, Dict, Iterator, Union
 
 from src.book import Book
 
@@ -21,7 +19,7 @@ class BookCollection:
     def __len__(self) -> int:
         return len(self._books)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Book]:
         return iter(self._books)
 
     def __getitem__(self, key: int | slice) -> Union[Book, "BookCollection"]:
@@ -38,58 +36,73 @@ class BookCollection:
 
 class IndexDict:
     def __init__(self) -> None:
-        self._indexes: Dict[str, Dict[Any, Any]] = {
-            "isbn": {},
-            "author": {},
-            "year": {},
-        }
+        self._by_isbn: Dict[str, Book] = {}
+        self._by_author: Dict[str, BookCollection] = {}
+        self._by_year: Dict[int, BookCollection] = {}
+
+    def get_by_isbn(self, isbn: str) -> Book | None:
+        return self._by_isbn.get(isbn)
+
+    def get_by_author(self, author: str) -> BookCollection:
+        return self._by_author.get(author, BookCollection())
+
+    def get_by_year(self, year: int) -> BookCollection:
+        return self._by_year.get(year, BookCollection())
 
     def add_book(self, book: Book) -> None:
-        if book.isbn in self._indexes["isbn"]:
+        if book.isbn in self._by_isbn:
             raise ValueError(f"Книга с таким ISBN: '{book}' уже есть в коллекции")
-        self._indexes["isbn"][book.isbn] = book
-        self._indexes["author"].setdefault(book.author, []).append(book)
-        self._indexes["year"].setdefault(book.year, []).append(book)
+        self._by_isbn[book.isbn] = book
+        self._by_author.setdefault(book.author, BookCollection()).add_book(book)
+        self._by_year.setdefault(book.year, BookCollection()).add_book(book)
 
     def remove_book(self, book: Book) -> None:
-        if book.isbn not in self._indexes["isbn"]:
+        if book.isbn not in self._by_isbn:
             raise ValueError(f"Книги с таким ISBN: '{book}'  нет в коллекции")
-        del self._indexes["isbn"][book.isbn]
+        del self._by_isbn[book.isbn]
 
-        if book.author in self._indexes["author"]:
-            self._indexes["author"][book.author].remove(book)
-            if not self._indexes["author"][book.author]:
-                del self._indexes["author"][book.author]
+        if book.author in self._by_author:
+            self._by_author[book.author].remove_book(book)
+            if not self._by_author[book.author]:
+                del self._by_author[book.author]
 
-        if book.year in self._indexes["year"]:
-            self._indexes["year"][book.year].remove(book)
-            if not self._indexes["year"][book.year]:
-                del self._indexes["year"][book.year]
+        if book.year in self._by_year:
+            self._by_year[book.year].remove_book(book)
+            if not self._by_year[book.year]:
+                del self._by_year[book.year]
 
     def __len__(self):
-        return len(self._indexes["isbn"])
+        return len(self._by_isbn)
 
     def __iter__(self):
-        return iter(self._indexes["isbn"].values())
+        return iter(self._by_isbn.values())
 
     def __getitem__(self, key: Union[str, int]) -> Any:
+        """Доступ по ключу.
+
+        Поддерживается:
+        - `str`: сначала трактуется как ISBN, затем как author.
+        - `int`: трактуется как year.
+
+        Примечание: строковый ключ неоднозначен (ISBN/author). На следующем этапе
+        сделаем API явным и избавимся от этой неоднозначности.
+        """
+
         if isinstance(key, str):
-            if key in self._indexes:
-                return self._indexes[key]
-            if key in self._indexes["isbn"]:
-                return self._indexes["isbn"][key]
-            if key in self._indexes["author"]:
-                return self._indexes["author"][key]
+            if key in self._by_isbn:
+                return self._by_isbn[key]
+            if key in self._by_author:
+                return self._by_author[key]
         elif isinstance(key, int):
-            if key in self._indexes["year"]:
-                return self._indexes["year"][key]
+            if key in self._by_year:
+                return self._by_year[key]
         raise KeyError(f"Ключ '{key}' не найден")
 
     def __contains__(self, item: Union[Book, str, int]) -> bool:
         if isinstance(item, Book):
-            return item.isbn in self._indexes["isbn"]
+            return item.isbn in self._by_isbn
         elif isinstance(item, str):
-            return item in self._indexes["isbn"] or item in self._indexes["author"]
+            return item in self._by_isbn or item in self._by_author
         elif isinstance(item, int):
-            return item in self._indexes["year"]
+            return item in self._by_year
         return False
