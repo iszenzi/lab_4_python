@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterator
+from typing import Any, Dict, Iterator, Union
 
 from src.book import Book
 
@@ -47,7 +47,7 @@ class BookCollection:
         """
         return iter(self._books)
 
-    def __getitem__(self, key: int | slice) -> Book | "BookCollection":
+    def __getitem__(self, key: int | slice) -> Union[Book, "BookCollection"]:
         """
         Возвращает книгу по индексу или подколлекцию по срезу
         :param key: Индекс или срез
