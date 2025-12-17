@@ -8,6 +8,10 @@ from src.exceptions import SimulationError
 
 
 def generate_random_book() -> Book:
+    """
+    Генерирует случайную книгу
+    :return: Сгенерированная книга
+    """
     titles = [
         "Утиные истории",
         "Случайная книга",
@@ -54,6 +58,11 @@ def generate_random_book() -> Book:
 
 
 def add_random_book(library: Library) -> None:
+    """
+    Добавляет случайную книгу в библиотеку
+    :param library: Библиотека
+    :return: None
+    """
     book = generate_random_book()
     try:
         library.add_book(book)
@@ -63,6 +72,11 @@ def add_random_book(library: Library) -> None:
 
 
 def remove_random_book(library: Library) -> None:
+    """
+    Удаляет случайную книгу из библиотеки
+    :param library: Библиотека
+    :return: None
+    """
     if len(library.collection) == 0:
         raise SimulationError("Коллекция пустая")
 
@@ -75,6 +89,12 @@ def remove_random_book(library: Library) -> None:
 
 
 def search_by_author(library: Library, author: str | None = None) -> list[Book]:
+    """
+    Ищет книги по автору
+    :param library: Библиотека
+    :param author: Автор
+    :return: Список найденных книг
+    """
     author_index = library.index["author"]
     if author is None:
         if not author_index:
@@ -90,6 +110,12 @@ def search_by_author(library: Library, author: str | None = None) -> list[Book]:
 
 
 def search_by_year(library: Library, year: int | None = None) -> list[Book]:
+    """
+    Ищет книги по году
+    :param library: Библиотека
+    :param year: Год
+    :return: Список найденных книг
+    """
     year_index = library.index["year"]
     if year is None:
         if not year_index:
@@ -105,6 +131,12 @@ def search_by_year(library: Library, year: int | None = None) -> list[Book]:
 
 
 def search_by_genre(library: Library, genre: str | None = None) -> list[Book]:
+    """
+    Ищет книги по жанру
+    :param library: Библиотека
+    :param genre: Жанр
+    :return: Список найденных книг
+    """
     if genre is None:
         genres = [book.genre for book in library.collection]
         if not genres:
@@ -120,6 +152,11 @@ def search_by_genre(library: Library, genre: str | None = None) -> list[Book]:
 
 
 def update_index(library: Library) -> None:
+    """
+    Обновляет индекс библиотеки
+    :param library: Библиотека
+    :return: None
+    """
     new_index = IndexDict()
     try:
         for book in library.collection:
@@ -132,6 +169,11 @@ def update_index(library: Library) -> None:
 
 
 def get_nonexistent_book(library: Library) -> None:
+    """
+    Проверяет несуществующую книгу в библиотеке
+    :param library: Библиотека
+    :return: None
+    """
     isbn_index = library.index["isbn"]
 
     fake_isbn = ""
@@ -146,6 +188,12 @@ def get_nonexistent_book(library: Library) -> None:
 
 
 def run_simulation(steps: int = 20, seed: int | None = None) -> None:
+    """
+    Запускает симуляцию библиотеки, выбирая одно случайное событие
+    :param steps: Количество шагов симуляции
+    :param seed: сид для генератора случайных событий
+    :return: None
+    """
     if seed is not None:
         random.seed(seed)
     library = Library()
