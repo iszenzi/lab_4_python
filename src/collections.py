@@ -23,6 +23,8 @@ class BookCollection:
         :param book: Книга
         :return: None
         """
+        if not isinstance(book, Book):
+            raise TypeError("Можно добавлять только объекты Book")
         self._books.append(book)
 
     def remove_book(self, book: Book) -> None:
@@ -31,6 +33,10 @@ class BookCollection:
         :param book: Книга
         :return: None
         """
+        if not isinstance(book, Book):
+            raise TypeError("Можно удалять только объекты Book")
+        if book not in self._books:
+            raise ValueError("Нельзя удалить книгу которой нет в коллекции")
         self._books.remove(book)
 
     def __len__(self) -> int:
@@ -87,6 +93,8 @@ class IndexDict:
         :param book: Книга
         :return: None
         """
+        if not isinstance(book, Book):
+            raise TypeError("Можно добавлять только объекты Book")
         if book.isbn in self._by_isbn:
             raise ValueError(f"Книга с таким ISBN: '{book}' уже есть в коллекции")
         self._by_isbn[book.isbn] = book
@@ -99,6 +107,8 @@ class IndexDict:
         :param book: Книга
         :return: None
         """
+        if not isinstance(book, Book):
+            raise TypeError("Можно удалять только объекты Book")
         if book.isbn not in self._by_isbn:
             raise ValueError(f"Книги с таким ISBN: '{book}'  нет в коллекции")
         del self._by_isbn[book.isbn]
