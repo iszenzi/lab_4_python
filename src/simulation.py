@@ -43,13 +43,12 @@ def generate_random_book() -> Book:
         "Роман",
         "Роман-эпопея",
     ]
-    isbns = [f"978-{random.randint(1000000000, 9999999999)}" for _ in range(10)]
 
     title = random.choice(titles)
     author = random.choice(authors)
     year = random.choice(years)
     genre = random.choice(genres)
-    isbn = random.choice(isbns)
+    isbn = f"978-{random.randint(1000000000, 9999999999)}"
 
     if genre == "Математика":
         return NonFictionBook(title, author, year, genre, isbn)
