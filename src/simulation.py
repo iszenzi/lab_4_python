@@ -1,6 +1,7 @@
 import random
 
 from src.book import Book, FictionBook, NonFictionBook
+from src.collections import IndexDict
 from src.library import Library
 from src.exceptions import SimulationError
 
@@ -101,3 +102,29 @@ def search_by_genre(library: Library, genre: str | None = None) -> list[Book]:
     for book in result:
         print(book)
     return result
+
+
+def update_index(library: Library) -> None:
+    new_index = IndexDict()
+    try:
+        for book in library.collection:
+            new_index.add_book(book)
+    except Exception as exc:
+        raise SimulationError(f"Не удалось обновить индекс, ошибка: {exc}")
+
+    library.index = new_index
+    print(f"Индекс обновлён, {len(library.index)} книг в индексе")
+
+
+def get_nonexistent_book(library: Library) -> None:
+    isbn_index = library.index["isbn"]
+
+    fake_isbn = ""
+    while True:
+        fake_isbn = f"978-{random.randint(1000000000, 9999999999)}"
+        if fake_isbn not in isbn_index:
+            break
+    book = library.find_by_isbn(fake_isbn)
+    if book is not None:
+        raise SimulationError(f"Неожиданно найдена книга с ISBN '{fake_isbn}': {book}")
+    print(f"Книга с несуществующим ISBN '{fake_isbn}' не найдена")
