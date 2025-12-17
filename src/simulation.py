@@ -1,4 +1,5 @@
 import random
+from typing import Callable
 
 from src.book import Book, FictionBook, NonFictionBook
 from src.collections import IndexDict
@@ -12,8 +13,13 @@ def generate_random_book() -> Book:
         "Случайная книга",
         "Конкретная математика",
         "Фантастические твари и где они обитают",
+        "Гарри Поттер и философский камень",
         "Гарри Поттер и тайная комната",
         "Сборник задач и упражнений по математическому анализу",
+        "Война и мир",
+        "Капитанская дочка",
+        "Евгений Онегин",
+        "Преступление и наказание",
     ]
     authors = [
         "Карл Баркс",
@@ -21,9 +27,18 @@ def generate_random_book() -> Book:
         "Дональд Кнут",
         "Дж. К. Роулинг",
         "Б.П. Демидович",
+        "Л.Н.Толстой",
+        "А.С. Пушкин",
+        "Ф.М. Достоевский",
     ]
     years = list(range(1900, 2025))
-    genres = ["Комикс", "Математика", "Фентези", "Роман"]
+    genres = [
+        "Комикс",
+        "Математика",
+        "Фентези",
+        "Роман",
+        "Роман-эпопея",
+    ]
     isbns = [f"978-{random.randint(1000000000, 9999999999)}" for _ in range(10)]
 
     title = random.choice(titles)
@@ -128,3 +143,36 @@ def get_nonexistent_book(library: Library) -> None:
     if book is not None:
         raise SimulationError(f"Неожиданно найдена книга с ISBN '{fake_isbn}': {book}")
     print(f"Книга с несуществующим ISBN '{fake_isbn}' не найдена")
+
+
+def run_simulation(steps: int = 20, seed: int | None = None) -> None:
+    if seed is not None:
+        random.seed(seed)
+    library = Library()
+
+    print("Добавление начальных книг в библиотеку:")
+    for _ in range(5):
+        add_random_book(library)
+
+    events: list[tuple[str, Callable]] = [
+        ("add_book", lambda: add_random_book(library)),
+        ("remove_book", lambda: remove_random_book(library)),
+        ("search_author", lambda: search_by_author(library)),
+        ("search_year", lambda: search_by_year(library)),
+        ("search_genre", lambda: search_by_genre(library)),
+        ("update_index", lambda: update_index(library)),
+        ("get_nonexistent", lambda: get_nonexistent_book(library)),
+    ]
+
+    print(f"НАЧАЛО СИМУЛЯЦИИ шагов {steps}, сид {seed}")
+    for step in range(1, steps + 1):
+        event_name, event_fn = random.choice(events)
+        print(
+            f"\n[шаг {step}/{steps}] событие {event_name}, {len(library.collection)} книг в библиотеке"
+        )
+        try:
+            event_fn()
+        except SimulationError as exc:
+            print(f"[шаг {step}/{steps}] событие {event_name} ОШИБКА: {exc}")
+
+    print(f"\nКОНЕЦ СИМУЛЯЦИИ всего книг в библиотеке {len(library.collection)}")
