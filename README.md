@@ -3,6 +3,29 @@
 ## Описание
 Этот проект представляет систему управления библиотекой на Python. В проекте есть базовые классы книг, пользовательская коллекция книг, пользовательские индексы для ускорения поиска, библиотека с методами поиска и симуляция случайных событий.
 
+## Структура проекта
+```text
+|-- src/
+|   |-- __init__.py
+|   |-- book.py          # Классы книг
+|   |-- collections.py   # Пользовательские коллекции BookCollection и IndexDict
+|   |-- exceptions.py    # Исключения 
+|   |-- library.py       # Класс Library
+|   |-- main.py          # CLI для запуска симуляции
+|   |-- simulation.py    # Симуляция случайных событий
+|-- tests/
+|   |-- __init__.py
+|   |-- test_book_collection.py
+|   |-- test_index_dict.py
+|   |-- test_library.py
+|   |-- test_simulation.py
+|-- pyproject.toml      
+|-- requirements.txt     # Зависимости для pip install
+|-- .pre-commit-config.yaml
+|-- README.md
+```
+
+
 ## Реализованные компоненты
 
 ### Книги
