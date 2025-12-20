@@ -19,6 +19,7 @@
 |   |-- test_index_dict.py       # Тесты IndexDict
 |   |-- test_library.py          # Тесты Library
 |   |-- test_simulation.py       # Тесты функций симуляции
+|-- .gitignore           # Игнорируемые файлы/папки
 |-- pyproject.toml
 |-- requirements.txt     # Зависимости для pip install
 |-- .pre-commit-config.yaml
