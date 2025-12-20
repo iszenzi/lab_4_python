@@ -22,6 +22,7 @@
 |-- pyproject.toml      
 |-- requirements.txt     # Зависимости для pip install
 |-- .pre-commit-config.yaml
+|-- uv.lock
 |-- README.md
 ```
 
