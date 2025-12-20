@@ -15,10 +15,10 @@
 |   |-- simulation.py    # Симуляция случайных событий
 |-- tests/
 |   |-- __init__.py
-|   |-- test_book_collection.py
-|   |-- test_index_dict.py
-|   |-- test_library.py
-|   |-- test_simulation.py
+|   |-- test_book_collection.py  # Тесты BookCollection
+|   |-- test_index_dict.py       # Тесты IndexDict
+|   |-- test_library.py          # Тесты Library
+|   |-- test_simulation.py       # Тесты функций симуляции
 |-- pyproject.toml
 |-- requirements.txt     # Зависимости для pip install
 |-- .pre-commit-config.yaml
