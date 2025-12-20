@@ -13,18 +13,20 @@
 |   |-- library.py       # Класс Library
 |   |-- main.py          # CLI для запуска симуляции
 |   |-- simulation.py    # Симуляция случайных событий
+|
 |-- tests/
 |   |-- __init__.py
 |   |-- test_book_collection.py  # Тесты BookCollection
 |   |-- test_index_dict.py       # Тесты IndexDict
 |   |-- test_library.py          # Тесты Library
 |   |-- test_simulation.py       # Тесты функций симуляции
+|
 |-- .gitignore           # Игнорируемые файлы/папки
 |-- pyproject.toml
 |-- requirements.txt     # Зависимости для pip install
 |-- .pre-commit-config.yaml
 |-- uv.lock
-|-- README.md
+|-- README.md            # Описание лабораторной
 ```
 
 ## Реализованные компоненты
