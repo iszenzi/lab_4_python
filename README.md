@@ -9,7 +9,7 @@
 |   |-- __init__.py
 |   |-- book.py          # Классы книг
 |   |-- collections.py   # Пользовательские коллекции BookCollection и IndexDict
-|   |-- exceptions.py    # Исключения 
+|   |-- exceptions.py    # Исключения
 |   |-- library.py       # Класс Library
 |   |-- main.py          # CLI для запуска симуляции
 |   |-- simulation.py    # Симуляция случайных событий
@@ -19,65 +19,118 @@
 |   |-- test_index_dict.py
 |   |-- test_library.py
 |   |-- test_simulation.py
-|-- pyproject.toml      
+|-- pyproject.toml
 |-- requirements.txt     # Зависимости для pip install
 |-- .pre-commit-config.yaml
 |-- README.md
 ```
 
-
 ## Реализованные компоненты
 
 ### Книги
 - `Book` - базовый класс книги
+	- `__init__(title: str, author: str, year: int, genre: str, isbn: str)`
+		- `title`: название книги
+		- `author`: автор книги
+		- `year`: год издания
+		- `genre`: жанр
+		- `isbn`: ISBN
+	- `__repr__() -> str` — строковое представление книги
 - `FictionBook` - художественная книга
+	- `__init__(title: str, author: str, year: int, genre: str, isbn: str)`
+		- `title`: название книги
+		- `author`: автор книги
+		- `year`: год издания
+		- `genre`: жанр
+		- `isbn`: ISBN
+	- `__repr__() -> str` — строковое представление художественной книги
 - `NonFictionBook` - нехудожественная книга
+	- `__init__(title: str, author: str, year: int, genre: str, isbn: str)`
+		- `title`: название книги
+		- `author`: автор книги
+		- `year`: год издания
+		- `genre`: жанр
+		- `isbn`: ISBN
+	- `__repr__() -> str` — строковое представление нехудожественной книги
 
 ### Пользовательские коллекции
 
 BookCollection
 Методы:
-- `add_book()` - добавление книги в коллекцию
-- `remove_book()` - удаление книги из коллекции
+- `__init__(books: list[Book] | None = None)` - создание коллекции
+	- `books`: начальный список книг (или `None` для пустой коллекции)
+- `add_book(book: Book)` - добавление книги в коллекцию
+	- `book`: добавляемая книга
+- `remove_book(book: Book)` - удаление книги из коллекции
+	- `book`: удаляемая книга
 - `__len__()` - количество книг в коллекции
 - `__iter__()` - итерация по книгам
-- `__getitem__()` - доступ по индексу и срезу
-- `__contains__()` - проверка наличия книги в коллекции
+- `__getitem__(key: int | slice)` - доступ по индексу и срезу
+	- `key`: индекс (`int`) или срез (`slice`)
+- `__contains__(book: Book)` - проверка наличия книги в коллекции
+	- `book`: книга для проверки
 
 IndexDict
 Методы:
-- `add_book()` - добавление книги в индексы
-- `remove_book()` - удаление книги из индексов
+- `__init__()` - создание пустых индексов
+- `add_book(book: Book)` - добавление книги в индексы
+	- `book`: добавляемая книга
+- `remove_book(book: Book)` - удаление книги из индексов
+	- `book`: удаляемая книга
 - `__len__()` - количество книг в индексе по ISBN
 - `__iter__()` - итерация по книгам в индексе ISBN
-- `__getitem__()` - доступ к индексам и поиск по ключу
-- `__contains__()` - проверка наличия книги или ключа в индексах
+- `__getitem__(key: str | int)` - доступ к индексам и поиск по ключу
+	- `key`: один из литералов (`"isbn"`, `"author"`, `"year"`) или конкретный ключ поиска (ISBN/автор/год)
+- `__contains__(item: Book | str | int)` - проверка наличия книги или ключа в индексах
+	- `item`: книга (`Book`) или ключ (ISBN `str`, автор `str`, год `int`)
 
 ### Библиотека
 
 Library
 Методы:
-- `add_book()` - добавление книги в библиотеку и индекс
-- `remove_book()` - удаление книги из библиотеки и индекса
-- `find_by_isbn()` - поиск книги по ISBN
-- `find_by_author()` - поиск книг по автору
-- `find_by_year()` - поиск книг по году
-- `find_by_genre()` - поиск книг по жанру
+- `__init__()` - создание пустой библиотеки
+- `add_book(book: Book)` - добавление книги в библиотеку и индекс
+	- `book`: добавляемая книга
+- `remove_book(book: Book)` - удаление книги из библиотеки и индекса
+	- `book`: удаляемая книга
+- `find_by_isbn(isbn: str) -> Book | None` - поиск книги по ISBN
+	- `isbn`: ISBN книги
+- `find_by_author(author: str) -> BookCollection` - поиск книг по автору
+	- `author`: автор
+- `find_by_year(year: int) -> BookCollection` - поиск книг по году
+	- `year`: год
+- `find_by_genre(genre: str) -> BookCollection` - поиск книг по жанру
+	- `genre`: жанр
+- `__repr__() -> str` — строковое представление библиотеки
 
 ### Симуляция
 Функции:
-- `run_simulation()` - запуск симуляции на заданное число шагов с сидом
-- `generate_random_book()` - генерация случайной книги
-- `add_random_book()` - добавление случайной книги в библиотеку
-- `remove_random_book()` - удаление случайной книги из библиотеки
-- `search_by_author()` - поиск книг по автору
-- `search_by_year()` - поиск книг по году
-- `search_by_genre()` - поиск книг по жанру
-- `update_index()` - перестроение индекса библиотеки
-- `get_nonexistent_book()` - поиска книги по несуществующему ISBN
+- `generate_random_book() -> Book` - генерация случайной книги
+- `add_random_book(library: Library)` - добавление случайной книги в библиотеку
+	- `library`: библиотека
+- `remove_random_book(library: Library)` - удаление случайной книги из библиотеки
+	- `library`: библиотека
+- `search_by_author(library: Library, author: str | None = None) -> list[Book]` - поиск книг по автору
+	- `library`: библиотека
+	- `author`: автор (если `None`, берётся случайный из индекса)
+- `search_by_year(library: Library, year: int | None = None) -> list[Book]` - поиск книг по году
+	- `library`: библиотека
+	- `year`: год (если `None`, берётся случайный из индекса)
+- `search_by_genre(library: Library, genre: str | None = None) -> list[Book]` - поиск книг по жанру
+	- `library`: библиотека
+	- `genre`: жанр (если `None`, берётся случайный из коллекции)
+- `update_index(library: Library)` - перестроение индекса библиотеки
+	- `library`: библиотека
+- `get_nonexistent_book(library: Library)` - проверка поиска по несуществующему ISBN
+	- `library`: библиотека
+- `run_simulation(steps: int = 20, seed: int | None = None)` - запуск симуляции на заданное число шагов с сидом
+	- `steps`: количество шагов симуляции
+	- `seed`: сид генератора случайных событий (если `None`, сид не фиксируется)
 
 ### CLI
 - `src.main` - запуск симуляции из командной строки через аргументы `--steps` и `--seed`
+- `main(argv: list[str] | None = None) -> int`
+	- `argv`: список аргументов CLI (если `None`, берётся из командной строки)
 
 ## Запуск программы
 Запуск симуляции осуществляется при помощи команды в терминале
@@ -89,4 +142,4 @@ python -m src.main
 ```bash
 python -m src.main --steps 20 --seed 123
 ```
-где `--step` количество шагов, а `--seed` сид генератора случайных событий
+где `--steps` количество шагов, а `--seed` сид генератора случайных событий
